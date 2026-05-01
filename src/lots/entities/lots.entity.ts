@@ -3,9 +3,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import { Category } from '../../category/entities/category.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Review } from 'src/review/entity/review.entity';
+import { Subcategory } from 'src/subcategory/entities/subcategory.entity';
 
 @Entity()
 export class Lots {
@@ -24,10 +29,10 @@ export class Lots {
   @Column()
   price!: number;
 
-  @Column()
+  @Column({ default: true })
   status!: boolean;
 
-  @Column()
+  @CreateDateColumn()
   created_at!: Date;
 
   @Column()
@@ -36,4 +41,13 @@ export class Lots {
   @ManyToOne(() => Category, (category) => category.lots)
   @JoinColumn({ name: 'category_id' })
   category!: Category;
+
+  @ManyToOne(() => User, (user) => user.lots)
+  user!: User;
+
+  @OneToMany(() => Review, (review) => review.lot)
+  reviews!: Review[];
+
+  @ManyToOne(() => Subcategory, (subcategory) => subcategory.lots)
+  subcategory!: User;
 }

@@ -1,26 +1,27 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { LotsModule } from './lots/lots.module';
 import { CategoryModule } from './category/category.module';
+import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
+import { OrdersModule } from './orders/orders.module';
+import { DatabaseModule } from './auth/database/database.module';
+import { ReviewController } from './review/review.controller';
+import { ReviewService } from './review/review.service';
+import { ReviewModule } from './review/review.module';
+import { SubcategoryModule } from './subcategory/subcategory.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'password',
-      database: 'books_db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-    }),
+    DatabaseModule, 
     LotsModule,
     CategoryModule,
+    UsersModule,
+    AuthModule,
+    OrdersModule,
+    ReviewModule,
+    SubcategoryModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [ReviewController],
+  providers: [ReviewService],
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Lots } from "./entities/lots.entiti";
+import { Lots } from "./entities/lots.entity";
 import { Repository } from "typeorm";
 import { CreateLotsDto } from "./dto/create-lots.dto";
 
@@ -31,10 +31,16 @@ export class LotsService {
   }
 
   async findAll() {
-    return this.lotsRepository.find();
+    const lots = await this.lotsRepository.find();
+
+    if (!lots) throw new NotFoundException('Lots not found');
+    return lots;
   }
   async findOne(id:number) {
-    return this.lotsRepository.find({ where: { id } });
+   const lot = await this.lotsRepository.find({ where: { id } });
+
+   if (!lot) throw new NotFoundException("Lot not found")
+    return lot;
   }
   async remove(dto: CreateLotsDto, id: number): Promise<Lots> {
     const lot = await this.lotsRepository.findOne({ where: { id: id } });
